@@ -43,6 +43,11 @@ const AppData = ({ children }) => {
             name: "TikTok Converter",
             type: "TikTok",
         },
+        {
+            icon: "",
+            name: "PornHub Converter",
+            type: "PornHub",
+        },
     ]
 
     return (
