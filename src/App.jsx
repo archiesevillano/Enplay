@@ -12,7 +12,14 @@ const App = () => {
         <AppData>
           <AppHeader />
           <section className="app__main my-5">
-            <div className='container d-flex flex-column justify-content-center align-items-center col-md-6'>
+            <div className='container d-flex flex-column justify-content-center align-items-center col-md-6 gap-5'>
+              <div className="d-flex flex-column justify-content-center align-items-center">
+                <Brand />
+                <p className="w-75 text-center">
+                  Download your favorite videos and musics with just few clicks
+                  Free video and Audio Downloader
+                </p>
+              </div>
               <URLInput />
             </div>
           </section>
