@@ -6,36 +6,42 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import Brand from '../Brand/Brand';
+import "./AppHeader.css";
+import { useContext, useState } from 'react';
+import { DataProvider } from '../../AppData';
+import { Link, NavLink } from 'react-router-dom';
 
 const AppHeader = () => {
+
+    const { pages, converters } = useContext(DataProvider);
+
     return (
         <header className="app__header">
-            <Navbar key={"sm"} expand={"sm"} className="bg-body-tertiary mb-3">
-                <Container fluid>
+            <Navbar key={"md"} expand={"md"} className="bg-body-tertiary mb-3">
+                <Container>
                     <Brand />
-                    <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${"sm"}`} />
+                    <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${"md"}`} />
                     <Navbar.Offcanvas
-                        id={`offcanvasNavbar-expand-${"sm"}`}
-                        aria-labelledby={`offcanvasNavbarLabel-expand-${"sm"}`}
+                        id={`offcanvasNavbar-expand-${"md"}`}
+                        aria-labelledby={`offcanvasNavbarLabel-expand-${"md"}`}
                         placement="end"
                     >
                         <Offcanvas.Header closeButton>
-                            <Offcanvas.Title id={`offcanvasNavbarLabel-expand-${"sm"}`}>
+                            <Offcanvas.Title id={`offcanvasNavbarLabel-expand-${"md"}`}>
                                 Menu
                             </Offcanvas.Title>
                         </Offcanvas.Header>
                         <Offcanvas.Body>
                             <Nav className="justify-content-end flex-grow-1 pe-3">
-                                <Nav.Link href="#action1">Home</Nav.Link>
-                                <Nav.Link href="#action2">Link</Nav.Link>
+                                {pages.map(item => <Nav.Link key={item?.id}><NavLink className="app__header__navlinks" style={({ isActive }) => ({
+                                    color: isActive ? 'var(--primary-clr)' : 'var(--t-shade2)'
+                                })} to={item?.path}>{item?.name}</NavLink></Nav.Link>)}
                                 <NavDropdown
-                                    title="Dropdown"
-                                    id={`offcanvasNavbarDropdown-expand-${"sm"}`}
+                                    title="Conversion"
+                                    id={`offcanvasNavbarDropdown-expand-${"md"}`}
+                                    className="app__header__conversionSwitch mx-3"
                                 >
-                                    <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
-                                    <NavDropdown.Item href="#action4">
-                                        Another action
-                                    </NavDropdown.Item>
+                                    {converters.map(item => <NavDropdown.Item>{item?.name}</NavDropdown.Item>)}
                                     <NavDropdown.Divider />
                                     <NavDropdown.Item href="#action5">
                                         Something else here

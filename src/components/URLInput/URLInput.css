@@ -1,0 +1,8 @@
+.app__main__urlField::after {
+    position: absolute;
+    top: -18px;
+    left: 0;
+    content: "Enter a valid URL here:";
+    font-family: var(--inter);
+    font-size: 0.7rem;
+}

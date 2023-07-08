@@ -1,0 +1,15 @@
+.app__header {
+    width: 100%;
+    box-sizing: border-box !important;
+}
+
+.app__header__navlinks {
+    text-decoration: none;
+    transition: all 0.3s ease-in;
+}
+
+@media (min-width: 1440px) {
+    .app-header {
+        margin: 0 100px;
+    }
+}

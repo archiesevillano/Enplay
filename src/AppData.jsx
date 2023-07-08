@@ -25,10 +25,28 @@ const AppData = ({ children }) => {
             name: "Contact",
             path: "/contact",
         },
+    ];
+
+    const converters = [
+        {
+            icon: "",
+            name: "Youtube Converter",
+            type: "Youtube",
+        },
+        {
+            icon: "",
+            name: "Facebook Converter",
+            type: "Facebook",
+        },
+        {
+            icon: "",
+            name: "TikTok Converter",
+            type: "TikTok",
+        },
     ]
 
     return (
-        <DataProvider.Provider value={{ pages }}>
+        <DataProvider.Provider value={{ pages, converters }}>
             {children}
         </DataProvider.Provider>
     );

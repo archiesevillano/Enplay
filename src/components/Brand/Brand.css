@@ -18,7 +18,7 @@
     content: '';
     top: 0;
     left: -20px;
-    z-index: -1;
+    z-index: 1;
     background-color: var(--primary-clr);
     border-radius: 30px;
     width: 50px;
