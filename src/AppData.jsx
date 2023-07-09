@@ -1,13 +1,16 @@
 import React from "react";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Facebook from "./assets/converters/svg/facebook.svg";
 import PornHub from "./assets/converters/svg/pornhub.svg";
 import Tiktok from "./assets/converters/svg/tiktok.svg";
 import YouTube from "./assets/converters/svg/youtube.svg";
+import Axios from "axios";
 
 export const DataProvider = React.createContext();
 
 const AppData = ({ children }) => {
+
+    const serverReq = Axios.create({ baseURL: import.meta.env.VITE_SERVER })
 
     const [conversionInfo, setConversionInfo] = useState(
         {
@@ -21,6 +24,10 @@ const AppData = ({ children }) => {
 
     // URL from newly converted video
     const [currentConvert, setCurrentConvert] = useState("");
+
+    useEffect(() => {
+        console.log(currentConvert);
+    }, [currentConvert]);
 
     const switchConverter = converterName => {
         converters.forEach(item => {
@@ -85,7 +92,7 @@ const AppData = ({ children }) => {
     ]
 
     return (
-        <DataProvider.Provider value={{ pages, converters, conversionInfo, switchConverter }}>
+        <DataProvider.Provider value={{ pages, converters, conversionInfo, switchConverter, serverReq, currentConvert, setCurrentConvert }}>
             {children}
         </DataProvider.Provider>
     );

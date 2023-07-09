@@ -6,13 +6,13 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import { useContext } from "react";
 import { DataProvider } from "../../AppData";
 
-const URLInput = () => {
+const URLInput = ({ onType }) => {
 
     const { converters, conversionInfo, switchConverter } = useContext(DataProvider);
 
     return (
         <InputGroup className="mb-3 app__main__urlField position-relative">
-            <Form.Control aria-label="Text input with dropdown button" placeholder="Paste valid URL here" />
+            <Form.Control onChange={onType} aria-label="Text input with dropdown button" placeholder="Paste valid URL here" />
 
             <DropdownButton
                 variant="secondary"

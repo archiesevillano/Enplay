@@ -1,7 +1,18 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import Brand from "./../components/Brand/Brand";
+import { useContext, useEffect } from "react";
+import { DataProvider } from "../AppData";
 
 const GetStarted = () => {
+
+    const { conversionInfo } = useContext(DataProvider);
+
+    // automatically redirects the user to convert child route section
+    const navigate = useNavigate();
+    useEffect(() => {
+        navigate("/c");
+    }, []);
+
     return (
         <section className="app__main mt-5 mb-3 getStarted">
             <div className='container d-flex flex-column justify-content-center align-items-center col-md-6 gap-4'>
