@@ -1,0 +1,12 @@
+.convertersLogo {
+    width: 100px;
+    object-fit: contain;
+    background: none;
+    height: auto;
+    display: inline-block;
+}
+
+.convertersList {
+    padding: 0;
+    margin: 0;
+}
