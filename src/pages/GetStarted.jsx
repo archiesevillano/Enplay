@@ -3,8 +3,8 @@ import Brand from "./../components/Brand/Brand";
 
 const GetStarted = () => {
     return (
-        <section className="app__main my-5 getStarted">
-            <div className='container d-flex flex-column justify-content-center align-items-center col-md-6 gap-5'>
+        <section className="app__main mt-5 mb-3 getStarted">
+            <div className='container d-flex flex-column justify-content-center align-items-center col-md-6 gap-4'>
                 <div className="d-flex flex-column justify-content-center align-items-center">
                     <Brand />
                     <p className="w-75 text-center">
