@@ -9,11 +9,34 @@ export const DataProvider = React.createContext();
 
 const AppData = ({ children }) => {
 
-    const [convertionInfo, setConvertionInfo] = useState({
-        type: "YouTube",
-        currentUrl: null, //current url that the user entered
-        prevURL: null, //previous url that the user entered. This will changed once the user pressed the ConvertNext button
-    });
+    const [conversionInfo, setConversionInfo] = useState(
+        {
+            name: "YouTube Converter",
+            type: "YouTube",
+            logo: YouTube,
+            currentUrl: null, //current url that the user entered
+            prevURL: null, //previous url that the user entered. This will changed once the user pressed the ConvertNext button
+        }
+    );
+
+    // URL from newly converted video
+    const [currentConvert, setCurrentConvert] = useState("");
+
+    const switchConverter = converterName => {
+        converters.forEach(item => {
+            if (item.type === converterName || item.name === converterName) {
+                setConversionInfo(
+                    {
+                        name: item.name,
+                        type: item.type,
+                        logo: item.logo,
+                        currentUrl: currentConvert,
+                        prevURL: conversionInfo.currentUrl,
+                    }
+                )
+            }
+        })
+    }
 
     const pages = [
         {
@@ -62,7 +85,7 @@ const AppData = ({ children }) => {
     ]
 
     return (
-        <DataProvider.Provider value={{ pages, converters }}>
+        <DataProvider.Provider value={{ pages, converters, conversionInfo, switchConverter }}>
             {children}
         </DataProvider.Provider>
     );

@@ -13,7 +13,7 @@ import { Link, NavLink } from 'react-router-dom';
 
 const AppHeader = () => {
 
-    const { pages, converters } = useContext(DataProvider);
+    const { pages, converters, conversionInfo, switchConverter } = useContext(DataProvider);
 
     return (
         <header className="app__header">
@@ -37,15 +37,11 @@ const AppHeader = () => {
                                     color: isActive ? 'var(--primary-clr)' : 'var(--t-shade2)'
                                 })} to={item?.path}>{item?.name}</NavLink></Nav.Link>)}
                                 <NavDropdown
-                                    title="Conversion"
+                                    title={conversionInfo?.name}
                                     id={`offcanvasNavbarDropdown-expand-${"md"}`}
                                     className="app__header__conversionSwitch mx-3"
                                 >
-                                    {converters.map(item => <NavDropdown.Item>{item?.name}</NavDropdown.Item>)}
-                                    <NavDropdown.Divider />
-                                    <NavDropdown.Item href="#action5">
-                                        Something else here
-                                    </NavDropdown.Item>
+                                    {converters.map(item => <NavDropdown.Item onClick={() => switchConverter(item?.name)}>{item?.name}</NavDropdown.Item>)}
                                 </NavDropdown>
                             </Nav>
                         </Offcanvas.Body>

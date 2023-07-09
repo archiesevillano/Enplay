@@ -8,7 +8,7 @@ import { DataProvider } from "../../AppData";
 
 const URLInput = () => {
 
-    const { converters } = useContext(DataProvider);
+    const { converters, conversionInfo, switchConverter } = useContext(DataProvider);
 
     return (
         <InputGroup className="mb-3 app__main__urlField position-relative">
@@ -16,11 +16,11 @@ const URLInput = () => {
 
             <DropdownButton
                 variant="secondary"
-                title="Youtube"
+                title={conversionInfo?.type}
                 id="input-group-dropdown-2"
                 align="end"
             >
-                {converters.map(item => <Dropdown.Item>{item?.type}</Dropdown.Item>)}
+                {converters.map(item => <Dropdown.Item onClick={() => switchConverter(item?.name)}>{item?.type}</Dropdown.Item>)}
             </DropdownButton>
         </InputGroup>
     );
