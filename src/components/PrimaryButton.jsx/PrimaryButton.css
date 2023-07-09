@@ -1,0 +1,12 @@
+.primButton {
+    background-color: var(--primary-clr);
+    color: white;
+    font-family: var(--heads);
+    padding: 8px 12px;
+    border-radius: 6px;
+}
+
+.primButton__text {
+    color: inherit;
+    font-family: inherit;
+}
