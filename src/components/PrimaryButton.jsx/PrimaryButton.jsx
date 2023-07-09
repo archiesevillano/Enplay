@@ -2,7 +2,7 @@ import { Spinner } from "react-bootstrap";
 import "./PrimaryButton.css";
 import { useState } from 'react';
 
-const PrimaryButton = ({ text, action }) => {
+const PrimaryButton = ({ text, action, hasLoader }) => {
 
     // This button can only be clicked once unless there's an error
     //determines if the button has or hasn't clicked yet by the user
@@ -20,11 +20,11 @@ const PrimaryButton = ({ text, action }) => {
     }
 
     return (
-        <div className="primButton d-inline-flex justify-content-center align-items-center position-relative" role="button" style={{ pointerEvents: clicked ? "none" : "" }} onClick={clicked ? "" : handleClick}>
-            <div className="container-fluid position-absolute justify-content-center align-items-center" style={{ display: clicked ? "flex" : "none", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}>
+        <div className="primButton d-inline-flex justify-content-center align-items-center position-relative" role="button" style={{ opacity: hasLoader ? clicked ? "0.8" : "" : "", pointerEvents: clicked ? hasLoader ? "none" : "" : "" }} onClick={clicked ? hasLoader ? "" : handleClick : handleClick}>
+            {hasLoader ? <div className="container-fluid position-absolute justify-content-center align-items-center" style={{ display: clicked ? "flex" : "none", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}>
                 <Spinner style={{ width: "20px", height: "20px", opacity: "0.7" }} />
-            </div>
-            <span style={{ visibility: clicked ? "hidden" : "visible" }}>{text}</span>
+            </div> : ""}
+            <span style={{ visibility: clicked ? hasLoader ? "hidden" : "visible" : "visible" }}>{text}</span>
         </div>
     );
 }
