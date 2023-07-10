@@ -11,7 +11,8 @@ const PrimaryButton = ({ text, action, hasLoader, color }) => {
     const handleClick = () => {
         try {
             isClicked(true);
-            action(); //run this when Button is clicked
+            //run this when Button is clicked
+            console.log(action());
         }
         catch (error) {
             console.log(error);
@@ -20,7 +21,7 @@ const PrimaryButton = ({ text, action, hasLoader, color }) => {
     }
 
     return (
-        <div className="primButton d-inline-flex justify-content-center align-items-center position-relative" role="button" style={{ backgroundColor: color || "transparent", opacity: hasLoader ? clicked ? "0.8" : "" : "", pointerEvents: clicked ? hasLoader ? "none" : "" : "" }} onClick={clicked ? hasLoader ? "" : handleClick : handleClick}>
+        <div className="primButton d-inline-flex justify-content-center align-items-center position-relative" role="button" style={{ backgroundColor: color || "transparent", opacity: hasLoader ? clicked ? "0.8" : "" : "", pointerEvents: clicked ? hasLoader ? "none" : "" : "" }} onClick={clicked ? hasLoader ? null : handleClick : handleClick}>
             {hasLoader ? <div className="container-fluid position-absolute justify-content-center align-items-center" style={{ display: clicked ? "flex" : "none", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}>
                 <Spinner style={{ width: "20px", height: "20px", opacity: "0.7" }} />
             </div> : ""}

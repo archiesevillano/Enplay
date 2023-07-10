@@ -10,7 +10,7 @@ export const DataProvider = React.createContext();
 
 const AppData = ({ children }) => {
 
-    const serverReq = Axios.create({ baseURL: import.meta.env.VITE_SERVER })
+    const serverReq = Axios.create({ baseURL: import.meta.env.VITE_SERVER });
 
     const [conversionInfo, setConversionInfo] = useState(
         {
@@ -24,10 +24,6 @@ const AppData = ({ children }) => {
 
     // URL from newly converted video
     const [currentConvert, setCurrentConvert] = useState("");
-
-    useEffect(() => {
-        console.log(currentConvert);
-    }, [currentConvert]);
 
     const switchConverter = converterName => {
         converters.forEach(item => {
@@ -91,8 +87,20 @@ const AppData = ({ children }) => {
         },
     ]
 
+    const [videoObject, setVideoObject] = useState({
+        url: null,
+        qualities: null,
+        duration: null,
+        title: null,
+        thumbnail: null,
+    });
+
+    useEffect(() => {
+        console.log(videoObject);
+    }, [videoObject]);
+
     return (
-        <DataProvider.Provider value={{ pages, converters, conversionInfo, switchConverter, serverReq, currentConvert, setCurrentConvert }}>
+        <DataProvider.Provider value={{ pages, converters, conversionInfo, switchConverter, serverReq, currentConvert, setCurrentConvert, setVideoObject, videoObject }}>
             {children}
         </DataProvider.Provider>
     );
