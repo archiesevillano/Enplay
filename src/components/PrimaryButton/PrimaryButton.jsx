@@ -12,7 +12,7 @@ const PrimaryButton = ({ text, action, hasLoader, color }) => {
         try {
             isClicked(true);
             //run this when Button is clicked
-            console.log(action());
+            action();
         }
         catch (error) {
             console.log(error);
