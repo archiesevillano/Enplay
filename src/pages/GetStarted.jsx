@@ -14,8 +14,8 @@ const GetStarted = () => {
     }, []);
 
     return (
-        <section className="app__main mt-5 mb-3 getStarted">
-            <div className='container d-flex flex-column justify-content-center align-items-center col-md-6 gap-4'>
+        <section className="app__main mt-5 mb-3 getStarted container container-md-fluid">
+            <div className='container d-flex flex-column justify-content-center align-items-center col-md-10 gap-4'>
                 <div className="d-flex flex-column justify-content-center align-items-center">
                     <Brand />
                     <p className="w-75 text-center">

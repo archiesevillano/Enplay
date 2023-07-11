@@ -1,6 +1,5 @@
 .brand {
     font-family: var(--title);
-    color: var(--t-shade1);
     display: inline-flex;
     justify-content: center;
     flex-direction: row;
@@ -13,16 +12,28 @@
     display: inline-block;
 }
 
+.brand__text__en {
+    color: inherit;
+    mix-blend-mode: luminosity;
+    position: relative;
+    z-index: 1;
+    filter: invert();
+}
+
+.brand__text__play {
+    color: var(--t-shade1);
+}
+
 .brand__text::before {
     position: absolute;
     content: '';
     top: 0;
-    left: -20px;
+    left: -12px;
     z-index: 1;
     background-color: var(--primary-clr);
-    border-radius: 30px;
-    width: 50px;
-    height: 50px;
+    border-radius: 30px 10px 10px;
+    width: 45px;
+    height: 45px;
 }
 
 .brand__version {

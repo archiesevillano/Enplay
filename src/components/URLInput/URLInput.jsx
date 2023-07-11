@@ -20,7 +20,7 @@ const URLInput = ({ onType }) => {
                 id="input-group-dropdown-2"
                 align="end"
             >
-                {converters.map(item => <Dropdown.Item onClick={() => switchConverter(item?.name)}>{item?.type}</Dropdown.Item>)}
+                {converters.map(item => <Dropdown.Item key={item?.name} onClick={() => switchConverter(item?.name)}>{item?.type}</Dropdown.Item>)}
             </DropdownButton>
         </InputGroup>
     );

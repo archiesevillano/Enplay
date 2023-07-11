@@ -41,7 +41,7 @@ const AppHeader = () => {
                                     id={`offcanvasNavbarDropdown-expand-${"md"}`}
                                     className="app__header__conversionSwitch mx-3"
                                 >
-                                    {converters.map(item => <NavDropdown.Item onClick={() => switchConverter(item?.name)}>{item?.name}</NavDropdown.Item>)}
+                                    {converters.map(item => <NavDropdown.Item key={item?.name} onClick={() => switchConverter(item?.name)}>{item?.name}</NavDropdown.Item>)}
                                 </NavDropdown>
                             </Nav>
                         </Offcanvas.Body>

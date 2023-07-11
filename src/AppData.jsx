@@ -92,6 +92,7 @@ const AppData = ({ children }) => {
         qualities: null,
         duration: null,
         title: null,
+        extension: null,
         thumbnail: null,
     });
 
