@@ -1,3 +1,8 @@
+.brandLink {
+    text-decoration: none;
+    color: black;
+}
+
 .brand {
     font-family: var(--title);
     display: inline-flex;
