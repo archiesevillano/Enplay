@@ -29,3 +29,8 @@ body {
   background: #dbdbdb !important;
   box-sizing: border-box;
 }
+
+
+.offcanvas {
+  --bs-offcanvas-width: 230px !important;
+}
