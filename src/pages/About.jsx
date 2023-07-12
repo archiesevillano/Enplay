@@ -4,7 +4,7 @@ const About = () => {
     return (
         <div className="container about">
             <header className="about__header p-3 ps-0">
-                <p className="m-0 p-0 fw-bold" style={{ fontSize: "2rem", fontFamily: "var(--heads)" }}>About</p>
+                <h1 className="m-0 p-0 fw-bold" style={{ fontFamily: "var(--inter)" }}>About</h1>
             </header>
             <article className="about__content">
                 <ul style={{ listStyleType: "none", padding: 0, fontFamily: "var(--inter)" }}>
