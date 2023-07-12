@@ -1,6 +1,6 @@
 const Copyright = () => {
     return (
-        <div className="copyright">
+        <div className="copyright my-5">
             <p className="copyright__developedBy m-0 text-center">
                 {`Developed by ${import.meta.env.VITE_DEVELOPER}`}
             </p>
