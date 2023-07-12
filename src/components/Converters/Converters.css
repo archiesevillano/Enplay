@@ -4,6 +4,7 @@
     background: none;
     height: auto;
     display: inline-block;
+    filter: grayscale(100%) contrast(30%) opacity(0.8);
 }
 
 .convertersList {

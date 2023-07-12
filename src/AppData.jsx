@@ -69,21 +69,25 @@ const AppData = ({ children }) => {
             logo: Facebook,
             name: "Facebook Converter",
             type: "Facebook",
+            to: "https://www.facebook.com/"
         },
         {
             logo: Tiktok,
             name: "TikTok Converter",
             type: "TikTok",
+            to: "https://www.tiktok.com/"
         },
         {
             logo: PornHub,
             name: "PornHub Converter",
             type: "PornHub",
+            to: "https://www.pornhub.com/",
         },
         {
             logo: YouTube,
             name: "Youtube Converter",
             type: "Youtube",
+            to: "https://www.youtube.com/",
         },
     ]
 
