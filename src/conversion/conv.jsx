@@ -7,71 +7,101 @@ import { DataProvider } from '../AppData';
 const Conversion = () => {
 
     const navigate = useNavigate();
-    const { serverReq, setCurrentConvert, currentConvert, setVideoObject } = useContext(DataProvider);
+    const { serverReq, setCurrentConvert, currentConvert, setVideoObject, conversionInfo } = useContext(DataProvider);
     const [hasConversionError, setConversionError] = useState(false);
+
+    const handleYoutubeConvert = async () => {
+        const FILE_EXTENSION = "mp4";
+
+        console.log(currentConvert);
+        console.log(import.meta.env.VITE_ACCESS_KEY);
+        console.log(`/${conversionInfo.type.toString().toLowerCase()}`);
+        const response = await serverReq.post(`/converter/${conversionInfo.type.toString().toLowerCase()}`, { accessKey: import.meta.env.VITE_ACCESS_KEY, url: currentConvert });
+        console.log(response);
+
+        // fetch mp4 formats only in formats array
+        const mp4Formats = response?.data?.formats.filter(item => item?.video_ext === FILE_EXTENSION);
+
+        const q1080p = mp4Formats?.filter(item => item?.format_note
+            === "1080p");
+        const q720p = mp4Formats?.filter(item => item?.format_note
+            === "720p");
+        const q360p = mp4Formats?.filter(item => item?.format_note
+            === "360p");
+        const q240p = mp4Formats?.filter(item => item?.format_note
+            === "240p");
+        const q144p = mp4Formats?.filter(item => item?.format_note
+            === "144p");
+
+        // sort format in descending order based on their filesize
+        q1080p.sort((a, b) => b.filesize - a.filesize);
+        q720p.sort((a, b) => b.filesize - a.filesize);
+        q360p.sort((a, b) => b.filesize - a.filesize);
+        q240p.sort((a, b) => b.filesize - a.filesize);
+        q144p.sort((a, b) => b.filesize - a.filesize);
+
+        const qualities = {
+            q1080p: q1080p[0] || null,
+            q720p: q720p[0] || null,
+            q360p: q360p[0] || null,
+            q240p: q240p[0] || null,
+            q144p: q144p[0] || null,
+        };
+
+        const videoThumbnail = response?.data?.thumbnail;
+        const videoDuration = response?.data?.duration;
+        const videoTitle = response?.data?.fulltitle;
+        const videoURL = response?.data?.webpage_url;
+        const videoId = response?.data?.id;
+        const videoExtension = FILE_EXTENSION;
+
+        setVideoObject(
+            {
+                id: videoId,
+                url: videoURL,
+                qualities: qualities,
+                duration: videoDuration,
+                title: videoTitle,
+                extension: videoExtension,
+                thumbnail: videoThumbnail,
+            }
+        );
+
+        // check if videoURL and id is not empty
+        if ((videoURL !== null || undefined) && videoId !== null || undefined) {
+            // setting current converted URL
+            setCurrentConvert(videoURL);
+            navigate("/d");
+        }
+    }
+
+    const handleFacebookConvert = async () => {
+        const response = await serverReq.post(`/converter/${conversionInfo.type.toString().toLowerCase()}`, { accessKey: import.meta.env.VITE_ACCESS_KEY, url: currentConvert });
+        console.log("response");
+        console.log(response);
+
+        const video = response?.data?.formats?.filter(item => {
+            return item?.format_id === "hd";
+        });
+        console.log("video");
+        console.log(video);
+
+        const audio = response?.data?.formats?.filter(item => {
+            return item?.audio_ext === "mp3";
+        });
+        console.log("audio");
+        console.log(audio);
+    }
 
     const handleConvert = async () => {
         try {
-            const FILE_EXTENSION = "mp4";
+            switch (conversionInfo.type.toString().toLowerCase()) {
+                case "youtube":
 
-            console.log(currentConvert);
-            console.log(import.meta.env.VITE_ACCESS_KEY);
-            const response = await serverReq.post("/converter", { accessKey: import.meta.env.VITE_ACCESS_KEY, url: currentConvert });
-            console.log(response);
-
-            // fetch mp4 formats only in formats array
-            const mp4Formats = response?.data?.formats.filter(item => item?.video_ext === FILE_EXTENSION);
-
-            const q1080p = mp4Formats?.filter(item => item?.format_note
-                === "1080p");
-            const q720p = mp4Formats?.filter(item => item?.format_note
-                === "720p");
-            const q360p = mp4Formats?.filter(item => item?.format_note
-                === "360p");
-            const q240p = mp4Formats?.filter(item => item?.format_note
-                === "240p");
-            const q144p = mp4Formats?.filter(item => item?.format_note
-                === "144p");
-
-            // sort format in descending order based on their filesize
-            q1080p.sort((a, b) => b.filesize - a.filesize);
-            q720p.sort((a, b) => b.filesize - a.filesize);
-            q360p.sort((a, b) => b.filesize - a.filesize);
-            q240p.sort((a, b) => b.filesize - a.filesize);
-            q144p.sort((a, b) => b.filesize - a.filesize);
-
-            const qualities = {
-                q1080p: q1080p[0] || null,
-                q720p: q720p[0] || null,
-                q360p: q360p[0] || null,
-                q240p: q240p[0] || null,
-                q144p: q144p[0] || null,
-            };
-
-            const videoThumbnail = response?.data?.thumbnail;
-            const videoDuration = response?.data?.duration;
-            const videoTitle = response?.data?.fulltitle;
-            const videoURL = response?.data?.webpage_url;
-            const videoId = response?.data?.id;
-            const videoExtension = FILE_EXTENSION;
-
-            setVideoObject(
-                {
-                    id: videoId,
-                    url: videoURL,
-                    qualities: qualities,
-                    duration: videoDuration,
-                    title: videoTitle,
-                    extension: videoExtension,
-                    thumbnail: videoThumbnail,
-                }
-            );
-
-            // check if videoURL and id is not empty
-            if ((videoURL !== null || undefined) && videoId !== null || undefined) {
-                // setting current converted URL
-                setCurrentConvert(videoURL);
-                navigate("/d");
+                    break;
+                case "facebook":
+                    handleFacebookConvert();
+                    break;
             }
 
         } catch (error) {
