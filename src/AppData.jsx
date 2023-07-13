@@ -12,6 +12,7 @@ export const DataProvider = React.createContext();
 const AppData = ({ children }) => {
 
     const serverReq = Axios.create({ baseURL: import.meta.env.VITE_SERVER });
+    const [converted, setConverted] = useState(false);
 
     const [conversionInfo, setConversionInfo] = useState(
         {
@@ -20,6 +21,7 @@ const AppData = ({ children }) => {
             logo: YouTube,
             currentUrl: null, //current url that the user entered
             prevURL: null, //previous url that the user entered. This will changed once the user pressed the ConvertNext button
+            converted: false,
         }
     );
 
@@ -29,16 +31,16 @@ const AppData = ({ children }) => {
             key: "https://www.youtube.com/watch?v=",
         },
         facebook: {
-            sampleURL: "a",
-            key: "a",
+            sampleURL: "https://www.facebook.com/watch?v=1210101486325925",
+            key: "https://www.facebook.com/watch?v=",
+        },
+        pornhub: {
+            sampleURL: "https://www.pornhub.com/view_video.php?viewkey=ph637c02a7e487b",
+            key: "https://www.pornhub.com/view_video.php?viewkey=",
         },
         tiktok: {
-            sampleURL: "a",
-            key: "a",
-        },
-        porhub: {
-            sampleURL: "a",
-            key: "a",
+            sampleURL: "https://vt.tiktok.com/ZSLfngE2E/",
+            key: "https://vt.tiktok.com/",
         },
     }
 
@@ -57,6 +59,7 @@ const AppData = ({ children }) => {
                         logo: item.logo,
                         currentUrl: currentConvert,
                         prevURL: conversionInfo.currentUrl,
+                        converted: true,
                     }
                 )
             }
@@ -96,13 +99,13 @@ const AppData = ({ children }) => {
         {
             logo: Tiktok,
             name: "TikTok Converter",
-            type: "TikTok",
+            type: "Tiktok",
             to: "https://www.tiktok.com/"
         },
         {
             logo: PornHub,
             name: "PornHub Converter",
-            type: "PornHub",
+            type: "Pornhub",
             to: "https://www.pornhub.com/",
         },
         {
@@ -114,20 +117,13 @@ const AppData = ({ children }) => {
     ]
 
     const [videoObject, setVideoObject] = useState({
-        url: null,
-        qualities: null,
-        duration: null,
         title: null,
-        extension: null,
         thumbnail: null,
+        downloadURL: null,
     });
 
-    useEffect(() => {
-        console.log(videoObject);
-    }, [videoObject]);
-
     return (
-        <DataProvider.Provider value={{ pages, converters, conversionInfo, errorMessage, setErrorMessage, switchConverter, serverReq, currentConvert, setCurrentConvert, setVideoObject, videoObject, validURLFormat }}>
+        <DataProvider.Provider value={{ pages, converters, conversionInfo, converted, setConverted, errorMessage, setErrorMessage, switchConverter, serverReq, currentConvert, setCurrentConvert, setVideoObject, videoObject, validURLFormat }}>
             {children}
             <SnackBar message={errorMessage} />
         </DataProvider.Provider>

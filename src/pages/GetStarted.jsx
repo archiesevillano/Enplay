@@ -5,13 +5,15 @@ import { DataProvider } from "../AppData";
 
 const GetStarted = () => {
 
-    const { conversionInfo } = useContext(DataProvider);
+    const { conversionInfo, converted, setConverted } = useContext(DataProvider);
     const { pathname } = useLocation();
 
     // automatically redirects the user to convert child route section
     const navigate = useNavigate();
     useEffect(() => {
-        navigate("/c");
+        if (!converted) {
+            navigate("/c");
+        }
     }, [pathname]);
 
     return (

@@ -3,11 +3,12 @@ import URLInput from "../components/URLInput/URLInput";
 import PrimaryButton from "../components/PrimaryButton/PrimaryButton";
 import { useContext, useState } from 'react';
 import { DataProvider } from '../AppData';
+import ContentUnavailable from './../../src/assets/not-available-content-img.jpg';
 
 const Conversion = () => {
 
     const navigate = useNavigate();
-    const { serverReq, setCurrentConvert, currentConvert, setVideoObject, conversionInfo, setErrorMessage, validURLFormat, switchConverter } = useContext(DataProvider);
+    const { serverReq, setCurrentConvert, converted, setConverted, currentConvert, setVideoObject, conversionInfo, setErrorMessage, validURLFormat, switchConverter } = useContext(DataProvider);
     const [hasConversionError, setConversionError] = useState(false);
 
     const handleYoutubeConvert = async () => {
@@ -20,57 +21,32 @@ const Conversion = () => {
         console.log(response);
 
         // fetch mp4 formats only in formats array
-        const mp4Formats = response?.data?.formats.filter(item => item?.video_ext === FILE_EXTENSION);
+        const mp4Formats = response?.data?.formats.filter(item => item?.video_ext === FILE_EXTENSION && item?.acodec === 'mp4a.40.2');
+        mp4Formats.sort((a, b) => b.quality - a.quality);
 
-        const q1080p = mp4Formats?.filter(item => item?.format_note
-            === "1080p");
-        const q720p = mp4Formats?.filter(item => item?.format_note
-            === "720p");
-        const q360p = mp4Formats?.filter(item => item?.format_note
-            === "360p");
-        const q240p = mp4Formats?.filter(item => item?.format_note
-            === "240p");
-        const q144p = mp4Formats?.filter(item => item?.format_note
-            === "144p");
+        console.log(mp4Formats);
 
-        // sort format in descending order based on their filesize
-        q1080p.sort((a, b) => b.filesize - a.filesize);
-        q720p.sort((a, b) => b.filesize - a.filesize);
-        q360p.sort((a, b) => b.filesize - a.filesize);
-        q240p.sort((a, b) => b.filesize - a.filesize);
-        q144p.sort((a, b) => b.filesize - a.filesize);
-
-        const qualities = {
-            q1080p: q1080p[0] || null,
-            q720p: q720p[0] || null,
-            q360p: q360p[0] || null,
-            q240p: q240p[0] || null,
-            q144p: q144p[0] || null,
-        };
-
+        const downloadURL = mp4Formats[0].url;
         const videoThumbnail = response?.data?.thumbnail;
-        const videoDuration = response?.data?.duration;
         const videoTitle = response?.data?.fulltitle;
-        const videoURL = response?.data?.webpage_url;
-        const videoId = response?.data?.id;
-        const videoExtension = FILE_EXTENSION;
 
+        setConvertDetails(videoTitle, videoThumbnail, downloadURL);
+    }
+
+    const setConvertDetails = (title, thumbnail, downloadURL) => {
         setVideoObject(
             {
-                id: videoId,
-                url: videoURL,
-                qualities: qualities,
-                duration: videoDuration,
-                title: videoTitle,
-                extension: videoExtension,
-                thumbnail: videoThumbnail,
+                url: currentConvert,
+                title,
+                thumbnail,
+                downloadURL,
             }
         );
 
         // check if videoURL and id is not empty
-        if ((videoURL !== null || undefined) && videoId !== null || undefined) {
+        if ((currentConvert !== null || undefined) && downloadURL !== null || undefined) {
+            setConverted(true);
             // setting current converted URL
-            setCurrentConvert(videoURL);
             navigate("/d");
         }
     }
@@ -78,19 +54,57 @@ const Conversion = () => {
     const handleFacebookConvert = async () => {
         const response = await serverReq.post(`/converter/${conversionInfo.type.toString().toLowerCase()}`, { accessKey: import.meta.env.VITE_ACCESS_KEY, url: currentConvert });
         console.log("response");
+        console.log(currentConvert);
+        console.log(response);
+        console.log(response.data);
+
+        if (response.data === "Either the video is deleted or it's not shared publicly!") {
+            setConvertDetails("This link is broken or have already expired. Try a new one", ContentUnavailable, undefined);
+        }
+        else {
+            alert("Facebook Working");
+            // const video = response?.data?.formats?.filter(item => {
+            //     return item?.format_id === "hd";
+            // });
+            // console.log("video");
+            // console.log(video);
+
+            // const audio = response?.data?.formats?.filter(item => {
+            //     return item?.audio_ext === "mp3";
+            // });
+            // console.log("audio");
+            // console.log(audio);
+        }
+
+    }
+
+    const handlePornhubConvert = async () => {
+        const response = await serverReq.post(`/converter/${conversionInfo.type.toString().toLowerCase()}`, { accessKey: import.meta.env.VITE_ACCESS_KEY, url: currentConvert });
+        console.log("response");
         console.log(response);
 
-        const video = response?.data?.formats?.filter(item => {
-            return item?.format_id === "hd";
-        });
-        console.log("video");
-        console.log(video);
+        const downloadURL = mp4Formats[0].url;
+        const videoThumbnail = response?.data?.thumbnail;
+        const videoTitle = response?.data?.fulltitle;
 
-        const audio = response?.data?.formats?.filter(item => {
-            return item?.audio_ext === "mp3";
-        });
-        console.log("audio");
-        console.log(audio);
+        setConvertDetails(videoTitle, videoThumbnail, downloadURL);
+    }
+
+    const handleTiktokConvert = async () => {
+        try {
+            const response = await serverReq.post(`/converter/${conversionInfo.type.toString().toLowerCase()}`, { accessKey: import.meta.env.VITE_ACCESS_KEY, url: currentConvert });
+            console.log("response");
+            console.log(response);
+
+            const downloadURL = response?.data?.result?.video[0] || response?.data?.result?.video[1] || response?.data?.result?.video[2];
+            const videoThumbnail = response?.data?.result?.cover[0] || response?.data?.result?.cover[1];
+            const videoTitle = response?.data?.result?.description;
+
+            console.log(downloadURL);
+            setConvertDetails(videoTitle, videoThumbnail, downloadURL);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     const handleConvert = async () => {
@@ -99,11 +113,19 @@ const Conversion = () => {
             try {
                 switch (conversionInfo.type.toString().toLowerCase()) {
                     case "youtube":
-
+                        handleYoutubeConvert();
                         break;
                     case "facebook":
                         handleFacebookConvert();
                         break;
+                    case "pornhub":
+                        handlePornhubConvert();
+                        break;
+                    case "tiktok":
+                        handleTiktokConvert();
+                        break;
+                    default:
+                        setErrorMessage("Unsupported Link");
                 }
 
             } catch (error) {
@@ -119,10 +141,12 @@ const Conversion = () => {
     const handleVerifyURL = () => {
         // check if the url is empty
         if (currentConvert) {
-            alert("true");
+            return true;
         }
-        setErrorMessage("Please enter URL");
-        return false;
+        else {
+            setErrorMessage("Please enter URL");
+            return false;
+        }
     }
 
     //reads the current url and selects/matches the proper converter for the given url

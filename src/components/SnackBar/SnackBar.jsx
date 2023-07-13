@@ -1,15 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import "./SnackBar.css";
+import { DataProvider } from "../../AppData";
 const SnackBar = ({ message }) => {
 
     const [isVisible, setVisibility] = useState(true);
+    const { setErrorMessage } = useContext(DataProvider);
 
     useEffect(() => {
         // only start the timer when message prop has value
         if (message) {
             setTimeout(() => {
                 setVisibility(false);
-                console.log("Timeout");
+                setErrorMessage("");
             }, 10000);
         }
     }, [message]);
