@@ -5,6 +5,7 @@ import PornHub from "./assets/converters/svg/pornhub.svg";
 import Tiktok from "./assets/converters/svg/tiktok.svg";
 import YouTube from "./assets/converters/svg/youtube.svg";
 import Axios from "axios";
+import SnackBar from "./components/SnackBar/SnackBar";
 
 export const DataProvider = React.createContext();
 
@@ -21,6 +22,27 @@ const AppData = ({ children }) => {
             prevURL: null, //previous url that the user entered. This will changed once the user pressed the ConvertNext button
         }
     );
+
+    const validURLFormat = {
+        youtube: {
+            sampleURL: "https://www.youtube.com/watch?v=-qHDsh0iTGs",
+            key: "https://www.youtube.com/watch?v=",
+        },
+        facebook: {
+            sampleURL: "a",
+            key: "a",
+        },
+        tiktok: {
+            sampleURL: "a",
+            key: "a",
+        },
+        porhub: {
+            sampleURL: "a",
+            key: "a",
+        },
+    }
+
+    const [errorMessage, setErrorMessage] = useState(null);
 
     // URL from newly converted video
     const [currentConvert, setCurrentConvert] = useState("");
@@ -105,8 +127,9 @@ const AppData = ({ children }) => {
     }, [videoObject]);
 
     return (
-        <DataProvider.Provider value={{ pages, converters, conversionInfo, switchConverter, serverReq, currentConvert, setCurrentConvert, setVideoObject, videoObject }}>
+        <DataProvider.Provider value={{ pages, converters, conversionInfo, errorMessage, setErrorMessage, switchConverter, serverReq, currentConvert, setCurrentConvert, setVideoObject, videoObject, validURLFormat }}>
             {children}
+            <SnackBar message={errorMessage} />
         </DataProvider.Provider>
     );
 }

@@ -9,11 +9,20 @@ import Brand from '../Brand/Brand';
 import "./AppHeader.css";
 import { useContext, useState } from 'react';
 import { DataProvider } from '../../AppData';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 
 const AppHeader = () => {
 
+    const location = useLocation();
+    const { pathname } = location; //gets the current path
     const { pages, converters, conversionInfo, switchConverter } = useContext(DataProvider);
+
+    const checkPath = () => {
+        if (pathname === '/c' || pathname === '/d') {
+            return true;
+        }
+        return false;
+    }
 
     return (
         <header className="app__header">
@@ -33,7 +42,10 @@ const AppHeader = () => {
                         </Offcanvas.Header>
                         <Offcanvas.Body>
                             <Nav className="justify-content-end flex-grow-1 pe-3">
-                                {pages.map(item => <Nav.Link key={item?.id}><NavLink className="app__header__navlinks" style={({ isActive }) => ({
+                                <Nav.Link key={pages[0]?.id}><NavLink className="app__header__navlinks" style={{
+                                    color: checkPath() ? 'var(--primary-clr)' : 'var(--t-shade2)'
+                                }} to={pages[0]?.path}>{pages[0]?.name}</NavLink></Nav.Link>
+                                {pages.filter(item => item?.path !== "/").map(item => <Nav.Link key={item?.id}><NavLink className="app__header__navlinks" style={({ isActive }) => ({
                                     color: isActive ? 'var(--primary-clr)' : 'var(--t-shade2)'
                                 })} to={item?.path}>{item?.name}</NavLink></Nav.Link>)}
                                 <NavDropdown

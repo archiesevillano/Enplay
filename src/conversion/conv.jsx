@@ -7,7 +7,7 @@ import { DataProvider } from '../AppData';
 const Conversion = () => {
 
     const navigate = useNavigate();
-    const { serverReq, setCurrentConvert, currentConvert, setVideoObject, conversionInfo } = useContext(DataProvider);
+    const { serverReq, setCurrentConvert, currentConvert, setVideoObject, conversionInfo, setErrorMessage, validURLFormat, switchConverter } = useContext(DataProvider);
     const [hasConversionError, setConversionError] = useState(false);
 
     const handleYoutubeConvert = async () => {
@@ -94,28 +94,53 @@ const Conversion = () => {
     }
 
     const handleConvert = async () => {
-        try {
-            switch (conversionInfo.type.toString().toLowerCase()) {
-                case "youtube":
+        // verify the url first before start the conversion
+        if (handleVerifyURL()) {
+            try {
+                switch (conversionInfo.type.toString().toLowerCase()) {
+                    case "youtube":
 
-                    break;
-                case "facebook":
-                    handleFacebookConvert();
-                    break;
+                        break;
+                    case "facebook":
+                        handleFacebookConvert();
+                        break;
+                }
+
+            } catch (error) {
+                console.log(error);
+                console.log(error.code);
+                if (error.code === "ERR_NETWORK") {
+                    setConversionError(true);
+                }
             }
+        }
+    }
 
-        } catch (error) {
-            console.log(error);
-            console.log(error.code);
-            if (error.code === "ERR_NETWORK") {
-                setConversionError(true);
+    const handleVerifyURL = () => {
+        // check if the url is empty
+        if (currentConvert) {
+            alert("true");
+        }
+        setErrorMessage("Please enter URL");
+        return false;
+    }
+
+    //reads the current url and selects/matches the proper converter for the given url
+    const defineConverter = inputValue => {
+        setCurrentConvert(inputValue);
+
+        for (const key in validURLFormat) {
+            console.log(validURLFormat[key]?.key);
+            if (inputValue.startsWith(validURLFormat[key]?.key)) {
+                console.log("It went through");
+                switchConverter(key.toString().charAt(0).toUpperCase() + key.toString().slice(1));
             }
         }
     }
 
     return (
         <div className="container-fluid container-xl my-4">
-            <URLInput onType={e => setCurrentConvert(e.target.value)} />
+            <URLInput onType={e => defineConverter(e.target.value)} />
             <p className="col col-md-10" style={{ fontFamily: "var(--inter)", fontSize: "0.7rem", transform: "translate(0, -13px)" }}>Search and Copy the URL of the video you wish to download and Paste it in here</p>
             <div className="container-fluid  d-flex justify-content-evenly align-items-center">
                 <div className="col col-lg-7 d-flex justify-content-evenly align-items-center">
