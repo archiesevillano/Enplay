@@ -107,6 +107,11 @@ const Conversion = () => {
         }
     }
 
+    const handleGoBack = () => {
+        setConverted(true);
+        navigate("/d");
+    }
+
     const handleConvert = async () => {
         // verify the url first before start the conversion
         if (handleVerifyURL()) {
@@ -114,20 +119,27 @@ const Conversion = () => {
                 switch (conversionInfo.type.toString().toLowerCase()) {
                     case "youtube":
                         handleYoutubeConvert();
+                        // remove the current url that has just been converted
+                        setCurrentConvert(null);
                         break;
                     case "facebook":
                         handleFacebookConvert();
+                        // remove the current url that has just been converted
+                        setCurrentConvert(null);
                         break;
                     case "pornhub":
                         handlePornhubConvert();
+                        // remove the current url that has just been converted
+                        setCurrentConvert(null);
                         break;
                     case "tiktok":
                         handleTiktokConvert();
+                        // remove the current url that has just been converted
+                        setCurrentConvert(null);
                         break;
                     default:
                         setErrorMessage("Unsupported Link");
                 }
-
             } catch (error) {
                 console.log(error);
                 console.log(error.code);
@@ -141,7 +153,19 @@ const Conversion = () => {
     const handleVerifyURL = () => {
         // check if the url is empty
         if (currentConvert) {
-            return true;
+            // check if the provided URL is supported
+            const isSupportedURL = (currentConvert.startsWith(validURLFormat.youtube.key) ||
+                currentConvert.startsWith(validURLFormat.facebook.key) ||
+                currentConvert.startsWith(validURLFormat.pornhub.key) ||
+                currentConvert.startsWith(validURLFormat.tiktok.key)) ? true : false;
+
+            if (isSupportedURL) {
+                return true;
+            }
+            else {
+                setErrorMessage("Unsupported URL");
+                return false;
+            }
         }
         else {
             setErrorMessage("Please enter URL");
@@ -169,10 +193,10 @@ const Conversion = () => {
             <div className="container-fluid  d-flex justify-content-evenly align-items-center">
                 <div className="col col-lg-7 d-flex justify-content-evenly align-items-center">
                     {!hasConversionError ? <><PrimaryButton cls="col-5 col-sm-4 col-lg-4 col-md-5 col-lg-5 col-xl-4" text="Convert" action={handleConvert} hasLoader={true} color={"var(--primary-clr)"} />
-                        <PrimaryButton cls="col-5 col-sm-4 col-lg-4 col-md-5 col-lg-5 col-xl-4" text="Go back" action={() => alert("Working")} hasLoader={false} color={"var(--primary-clr)"} /></>
+                        <PrimaryButton cls="col-5 col-sm-4 col-lg-4 col-md-5 col-lg-5 col-xl-4" text="Go back" action={handleGoBack} hasLoader={false} color={"var(--primary-clr)"} /></>
                         :
                         <><PrimaryButton cls="col-5 col-sm-4 col-lg-4 col-md-5 col-lg-5 col-xl-4" text="Retry" action={handleConvert} hasLoader={true} color={"var(--primary-clr)"} />
-                            <PrimaryButton cls="col-5 col-sm-4 col-lg-4 col-md-5 col-lg-5 col-xl-4" text="Go back" action={() => alert("Working")} hasLoader={false} color={"var(--primary-clr)"} /></>}
+                            <PrimaryButton cls="col-5 col-sm-4 col-lg-4 col-md-5 col-lg-5 col-xl-4" text="Go back" action={handleGoBack} hasLoader={false} color={"var(--primary-clr)"} /></>}
                 </div>
             </div>
         </div>
