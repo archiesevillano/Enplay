@@ -13,12 +13,8 @@ const Conversion = () => {
     const handleYoutubeConvert = async () => {
         try {
             const FILE_EXTENSION = "mp4";
-
-            console.log(currentConvert);
-            console.log(import.meta.env.VITE_ACCESS_KEY);
-            console.log(`/${conversionInfo.type.toString().toLowerCase()}`);
             const response = await serverReq.post(`/converter/${conversionInfo.type.toString().toLowerCase()}`, { accessKey: import.meta.env.VITE_ACCESS_KEY, url: currentConvert });
-            console.log(response);
+
             if (response.request === 0) {
                 throw "Network Error";
             }
@@ -26,8 +22,6 @@ const Conversion = () => {
                 // fetch mp4 formats only in formats array
                 const mp4Formats = response?.data?.formats.filter(item => item?.video_ext === FILE_EXTENSION && item?.acodec === 'mp4a.40.2');
                 mp4Formats.sort((a, b) => b.quality - a.quality);
-
-                console.log(mp4Formats);
 
                 const downloadURL = mp4Formats[0].url;
                 const videoThumbnail = response?.data?.thumbnail;
@@ -37,7 +31,6 @@ const Conversion = () => {
             }
         }
         catch (error) {
-            console.log(error);
             setErrorMessage(error.message);
         }
 
@@ -90,7 +83,6 @@ const Conversion = () => {
         // verify the url first before start the conversion
         if (handleVerifyURL()) {
             try {
-                console.log(conversionInfo.type.toString().toLowerCase());
                 switch (conversionInfo.type.toString().toLowerCase()) {
                     case "youtube":
                         handleYoutubeConvert();
@@ -115,22 +107,16 @@ const Conversion = () => {
                         setErrorMessage("Unsupported Link");
                 }
             } catch (error) {
-                console.log(error);
-                console.log(error.code);
                 if (error.code === "ERR_NETWORK") {
                     setErrorMessage("Network Error. Please Try again later")
                 }
             }
-        }
-        else {
-            console.log("Error input");
         }
     }
 
     const handleVerifyURL = () => {
         // check if the url is empty
         if (currentConvert) {
-            console.log(currentConvert);
             // check if the provided URL is supported
             const isSupportedURL = (currentConvert.startsWith(validURLFormat.youtube.key) ||
                 currentConvert.startsWith(validURLFormat.facebook.key) ||
@@ -156,9 +142,7 @@ const Conversion = () => {
         setCurrentConvert(inputValue);
 
         for (const key in validURLFormat) {
-            console.log(validURLFormat[key]?.key);
             if (inputValue.startsWith(validURLFormat[key]?.key)) {
-                console.log("It went through");
                 switchConverter(key.toString().charAt(0).toUpperCase() + key.toString().slice(1));
             }
         }
