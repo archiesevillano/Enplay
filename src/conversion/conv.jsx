@@ -44,63 +44,6 @@ const Conversion = () => {
 
     }
 
-    const setConvertDetails = (title, thumbnail, downloadURL) => {
-        setVideoObject(
-            {
-                url: currentConvert,
-                title,
-                thumbnail,
-                downloadURL,
-            }
-        );
-
-        // check if videoURL and id is not empty
-        if ((currentConvert !== null || undefined) && downloadURL !== null || undefined) {
-            setConverted(true);
-            // setting current converted URL
-            navigate("/d");
-        }
-    }
-
-    // const handleFacebookConvert = async () => {
-    //     const response = await serverReq.post(`/converter/${conversionInfo.type.toString().toLowerCase()}`, { accessKey: import.meta.env.VITE_ACCESS_KEY, url: currentConvert });
-    //     console.log("response");
-    //     console.log(currentConvert);
-    //     console.log(response);
-    //     console.log(response.data);
-
-    //     if (response.data === "Either the video is deleted or it's not shared publicly!") {
-    //         setConvertDetails("This link is broken or have already expired. Try a new one", ContentUnavailable, undefined);
-    //     }
-    //     else {
-    //         alert("Facebook Working");
-    //         // const video = response?.data?.formats?.filter(item => {
-    //         //     return item?.format_id === "hd";
-    //         // });
-    //         // console.log("video");
-    //         // console.log(video);
-
-    //         // const audio = response?.data?.formats?.filter(item => {
-    //         //     return item?.audio_ext === "mp3";
-    //         // });
-    //         // console.log("audio");
-    //         // console.log(audio);
-    //     }
-
-    // }
-
-    const handlePornhubConvert = async () => {
-        const response = await serverReq.post(`/converter/${conversionInfo.type.toString().toLowerCase()}`, { accessKey: import.meta.env.VITE_ACCESS_KEY, url: currentConvert });
-        console.log("response");
-        console.log(response);
-
-        const downloadURL = mp4Formats[0].url;
-        const videoThumbnail = response?.data?.thumbnail;
-        const videoTitle = response?.data?.fulltitle;
-
-        setConvertDetails(videoTitle, videoThumbnail, downloadURL);
-    }
-
     const handleTiktokConvert = async () => {
         try {
             const response = await serverReq.post(`/converter/${conversionInfo.type.toString().toLowerCase()}`, { accessKey: import.meta.env.VITE_ACCESS_KEY, url: currentConvert });
@@ -118,6 +61,24 @@ const Conversion = () => {
         } catch (error) {
             console.log(error);
             setConversionError(true);
+        }
+    }
+
+    const setConvertDetails = (title, thumbnail, downloadURL) => {
+        setVideoObject(
+            {
+                url: currentConvert,
+                title,
+                thumbnail,
+                downloadURL,
+            }
+        );
+
+        // check if videoURL and id is not empty
+        if ((currentConvert !== null || undefined) && downloadURL !== null || undefined) {
+            setConverted(true);
+            // setting current converted URL
+            navigate("/d");
         }
     }
 
@@ -220,8 +181,44 @@ const Conversion = () => {
 
 export default Conversion;
 
-// {!hasConversionError ? <><PrimaryButton cls="col-5 col-sm-4 col-lg-4 col-md-5 col-lg-5 col-xl-4" text="Convert" action={handleConvert} hasLoader={true} color={"var(--primary-clr)"} />
-//                         <PrimaryButton cls="col-5 col-sm-4 col-lg-4 col-md-5 col-lg-5 col-xl-4" text="Go back" action={handleGoBack} hasLoader={false} color={"var(--primary-clr)"} /></>
-//                         :
-//                         <><PrimaryButton cls="col-5 col-sm-4 col-lg-4 col-md-5 col-lg-5 col-xl-4" text="Retry" action={handleConvert} hasLoader={true} color={"var(--primary-clr)"} />
-//                             <PrimaryButton cls="col-5 col-sm-4 col-lg-4 col-md-5 col-lg-5 col-xl-4" text="Go back" action={handleGoBack} hasLoader={false} color={"var(--primary-clr)"} /></>}
+
+// FACEBOOK AND YOUTUBE CONVERTER TEMPORARILY REMOVED
+
+// const handleFacebookConvert = async () => {
+    //     const response = await serverReq.post(`/converter/${conversionInfo.type.toString().toLowerCase()}`, { accessKey: import.meta.env.VITE_ACCESS_KEY, url: currentConvert });
+    //     console.log("response");
+    //     console.log(currentConvert);
+    //     console.log(response);
+    //     console.log(response.data);
+
+    //     if (response.data === "Either the video is deleted or it's not shared publicly!") {
+    //         setConvertDetails("This link is broken or have already expired. Try a new one", ContentUnavailable, undefined);
+    //     }
+    //     else {
+    //         alert("Facebook Working");
+    //         // const video = response?.data?.formats?.filter(item => {
+    //         //     return item?.format_id === "hd";
+    //         // });
+    //         // console.log("video");
+    //         // console.log(video);
+
+    //         // const audio = response?.data?.formats?.filter(item => {
+    //         //     return item?.audio_ext === "mp3";
+    //         // });
+    //         // console.log("audio");
+    //         // console.log(audio);
+    //     }
+
+    // }
+
+    // const handlePornhubConvert = async () => {
+    //     const response = await serverReq.post(`/converter/${conversionInfo.type.toString().toLowerCase()}`, { accessKey: import.meta.env.VITE_ACCESS_KEY, url: currentConvert });
+    //     console.log("response");
+    //     console.log(response);
+
+    //     const downloadURL = mp4Formats[0].url;
+    //     const videoThumbnail = response?.data?.thumbnail;
+    //     const videoTitle = response?.data?.fulltitle;
+
+    //     setConvertDetails(videoTitle, videoThumbnail, downloadURL);
+    // }
