@@ -5,7 +5,7 @@ import Axios from 'axios';
 
 const DownloadSection = () => {
     const navigate = useNavigate();
-    const { videoObject, serverReq, setConverted, conversionInfo } = useContext(DataProvider);
+    const { videoObject, serverReq, setConverted, conversionInfo, setConversionInfo, currentConvert, setCurrentConvert } = useContext(DataProvider);
     const {
         downloadURL,
         title,
@@ -16,11 +16,12 @@ const DownloadSection = () => {
     const handleConvertNext = () => {
         navigate("/c");
         setConverted(false);
+        setConversionInfo({ ...conversionInfo, prevURL: currentConvert === null ? conversionInfo.prevURL : currentConvert });
+        setCurrentConvert(null);
     }
 
     //  if there is no existing converted video or url, the user will automatically be redirected to conversion section
     if (videoObject === null) {
-
         navigate("/c");
 
     }

@@ -57,8 +57,8 @@ const AppData = ({ children }) => {
                         name: item.name,
                         type: item.type,
                         logo: item.logo,
-                        currentUrl: currentConvert,
-                        prevURL: conversionInfo.currentUrl,
+                        currentUrl: currentConvert === null ? null : currentConvert,
+                        prevURL: conversionInfo.prevURL === null ? null : conversionInfo.prevURL,
                         converted: true,
                     }
                 )
@@ -123,7 +123,7 @@ const AppData = ({ children }) => {
     });
 
     return (
-        <DataProvider.Provider value={{ pages, converters, conversionInfo, converted, setConverted, errorMessage, setErrorMessage, switchConverter, serverReq, currentConvert, setCurrentConvert, setVideoObject, videoObject, validURLFormat }}>
+        <DataProvider.Provider value={{ pages, converters, conversionInfo, setConversionInfo, converted, setConverted, errorMessage, setErrorMessage, switchConverter, serverReq, currentConvert, setCurrentConvert, setVideoObject, videoObject, validURLFormat }}>
             {children}
             <SnackBar />
         </DataProvider.Provider>

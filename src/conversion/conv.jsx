@@ -35,7 +35,6 @@ const Conversion = () => {
 
                 setConvertDetails(videoTitle, videoThumbnail, downloadURL);
             }
-            setCurrentConvert(null);
         }
         catch (error) {
             console.log(error);
