@@ -9,7 +9,6 @@ const Conversion = () => {
 
     const navigate = useNavigate();
     const { serverReq, setCurrentConvert, converted, setConverted, currentConvert, setVideoObject, conversionInfo, setErrorMessage, validURLFormat, switchConverter } = useContext(DataProvider);
-    const [hasConversionError, setConversionError] = useState(false);
 
     const handleYoutubeConvert = async () => {
         try {
@@ -35,15 +34,12 @@ const Conversion = () => {
                 const videoTitle = response?.data?.fulltitle;
 
                 setConvertDetails(videoTitle, videoThumbnail, downloadURL);
-                // if there's an error prior to this successful process, then it will be overwrite by the successful process
-                setConversionError(false);
             }
-
-
+            setCurrentConvert(null);
         }
         catch (error) {
             console.log(error);
-            setConversionError(true);
+            setErrorMessage(error.message);
         }
 
     }
@@ -139,7 +135,6 @@ const Conversion = () => {
                     case "youtube":
                         handleYoutubeConvert();
                         // remove the current url that has just been converted
-                        setCurrentConvert(null);
                         break;
                     case "facebook":
                         handleFacebookConvert();
@@ -163,7 +158,7 @@ const Conversion = () => {
                 console.log(error);
                 console.log(error.code);
                 if (error.code === "ERR_NETWORK") {
-                    setConversionError(true);
+                    setErrorMessage("Network Error. Please Try again later")
                 }
             }
         }
@@ -216,7 +211,7 @@ const Conversion = () => {
             <div className="container-fluid  d-flex justify-content-evenly align-items-center">
                 <div className="col col-lg-7 d-flex justify-content-evenly align-items-center">
                     <AppButton className="col-5 col-sm-4 col-lg-4 col-md-5 col-lg-5 col-xl-4" text={"Convert"} action={handleConvert} loader={true} />
-                    <AppButton className="col-5 col-sm-4 col-lg-4 col-md-5 col-lg-5 col-xl-4" text={"Go Back"} action={handleGoBack} loader={false} />
+                    <AppButton className="col-5 col-sm-4 col-lg-4 col-md-5 col-lg-5 col-xl-4" text={"Go Back"} action={handleGoBack} loader={false} disable={conversionInfo.prevURL === null} />
                 </div>
             </div>
         </div>

@@ -8,6 +8,10 @@
     border-radius: 5px;
 }
 
+.appButton.disabled {
+    filter: grayscale(80%) opacity(60%);
+}
+
 .appButton__button {
     border: none;
     padding: 5px 12px;

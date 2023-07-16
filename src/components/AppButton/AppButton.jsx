@@ -2,7 +2,7 @@ import { Spinner } from "react-bootstrap";
 import { useState } from 'react';
 import "./AppButton.css";
 
-const AppButton = ({ action, text, className, loader }) => {
+const AppButton = ({ action, text, className, loader, disable }) => {
 
     const [isAvailable, setAvailable] = useState(true);
 
@@ -23,10 +23,10 @@ const AppButton = ({ action, text, className, loader }) => {
     )
 
     return (
-        <div className={`appButton position-relative ${className}`} role="button" style={{ cursor: isAvailable ? "pointer" : "default" }}>
+        <div className={`appButton position-relative ${className} ${disable !== (undefined || null) ? disable ? "disabled" : "" : ""}`} role="button" style={{ cursor: isAvailable ? "pointer" : "default", pointerEvents: disable !== (undefined || null) ? disable ? "none" : "" : "" }}>
             {!isAvailable && spinner}
             <button style={{ opacity: isAvailable ? 1 : loader ? 0 : 1, cursor: isAvailable ? "pointer" : loader ? "default" : "pointer" }} className="appButton__button" onClick={handleClick}>{text}</button>
-        </div>
+        </div >
     );
 }
 
