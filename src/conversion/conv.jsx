@@ -12,25 +12,34 @@ const Conversion = () => {
     const [hasConversionError, setConversionError] = useState(false);
 
     const handleYoutubeConvert = async () => {
-        const FILE_EXTENSION = "mp4";
+        try {
+            const FILE_EXTENSION = "mp4";
 
-        console.log(currentConvert);
-        console.log(import.meta.env.VITE_ACCESS_KEY);
-        console.log(`/${conversionInfo.type.toString().toLowerCase()}`);
-        const response = await serverReq.post(`/converter/${conversionInfo.type.toString().toLowerCase()}`, { accessKey: import.meta.env.VITE_ACCESS_KEY, url: currentConvert });
-        console.log(response);
+            console.log(currentConvert);
+            console.log(import.meta.env.VITE_ACCESS_KEY);
+            console.log(`/${conversionInfo.type.toString().toLowerCase()}`);
+            const response = await serverReq.post(`/converter/${conversionInfo.type.toString().toLowerCase()}`, { accessKey: import.meta.env.VITE_ACCESS_KEY, url: currentConvert });
+            console.log(response);
 
-        // fetch mp4 formats only in formats array
-        const mp4Formats = response?.data?.formats.filter(item => item?.video_ext === FILE_EXTENSION && item?.acodec === 'mp4a.40.2');
-        mp4Formats.sort((a, b) => b.quality - a.quality);
+            // fetch mp4 formats only in formats array
+            const mp4Formats = response?.data?.formats.filter(item => item?.video_ext === FILE_EXTENSION && item?.acodec === 'mp4a.40.2');
+            mp4Formats.sort((a, b) => b.quality - a.quality);
 
-        console.log(mp4Formats);
+            console.log(mp4Formats);
 
-        const downloadURL = mp4Formats[0].url;
-        const videoThumbnail = response?.data?.thumbnail;
-        const videoTitle = response?.data?.fulltitle;
+            const downloadURL = mp4Formats[0].url;
+            const videoThumbnail = response?.data?.thumbnail;
+            const videoTitle = response?.data?.fulltitle;
 
-        setConvertDetails(videoTitle, videoThumbnail, downloadURL);
+            setConvertDetails(videoTitle, videoThumbnail, downloadURL);
+            // if there's an error prior to this successful process, then it will be overwrite by the successful process
+            setConversionError(false);
+        }
+        catch (error) {
+            console.log(error);
+            setConversionError(true);
+        }
+
     }
 
     const setConvertDetails = (title, thumbnail, downloadURL) => {
@@ -51,32 +60,32 @@ const Conversion = () => {
         }
     }
 
-    const handleFacebookConvert = async () => {
-        const response = await serverReq.post(`/converter/${conversionInfo.type.toString().toLowerCase()}`, { accessKey: import.meta.env.VITE_ACCESS_KEY, url: currentConvert });
-        console.log("response");
-        console.log(currentConvert);
-        console.log(response);
-        console.log(response.data);
+    // const handleFacebookConvert = async () => {
+    //     const response = await serverReq.post(`/converter/${conversionInfo.type.toString().toLowerCase()}`, { accessKey: import.meta.env.VITE_ACCESS_KEY, url: currentConvert });
+    //     console.log("response");
+    //     console.log(currentConvert);
+    //     console.log(response);
+    //     console.log(response.data);
 
-        if (response.data === "Either the video is deleted or it's not shared publicly!") {
-            setConvertDetails("This link is broken or have already expired. Try a new one", ContentUnavailable, undefined);
-        }
-        else {
-            alert("Facebook Working");
-            // const video = response?.data?.formats?.filter(item => {
-            //     return item?.format_id === "hd";
-            // });
-            // console.log("video");
-            // console.log(video);
+    //     if (response.data === "Either the video is deleted or it's not shared publicly!") {
+    //         setConvertDetails("This link is broken or have already expired. Try a new one", ContentUnavailable, undefined);
+    //     }
+    //     else {
+    //         alert("Facebook Working");
+    //         // const video = response?.data?.formats?.filter(item => {
+    //         //     return item?.format_id === "hd";
+    //         // });
+    //         // console.log("video");
+    //         // console.log(video);
 
-            // const audio = response?.data?.formats?.filter(item => {
-            //     return item?.audio_ext === "mp3";
-            // });
-            // console.log("audio");
-            // console.log(audio);
-        }
+    //         // const audio = response?.data?.formats?.filter(item => {
+    //         //     return item?.audio_ext === "mp3";
+    //         // });
+    //         // console.log("audio");
+    //         // console.log(audio);
+    //     }
 
-    }
+    // }
 
     const handlePornhubConvert = async () => {
         const response = await serverReq.post(`/converter/${conversionInfo.type.toString().toLowerCase()}`, { accessKey: import.meta.env.VITE_ACCESS_KEY, url: currentConvert });
@@ -102,8 +111,11 @@ const Conversion = () => {
 
             console.log(downloadURL);
             setConvertDetails(videoTitle, videoThumbnail, downloadURL);
+            // if there's an error prior to this successful process, then it will be overwrite by the successful process
+            setConversionError(false);
         } catch (error) {
             console.log(error);
+            setConversionError(true);
         }
     }
 
@@ -116,6 +128,7 @@ const Conversion = () => {
         // verify the url first before start the conversion
         if (handleVerifyURL()) {
             try {
+                console.log(conversionInfo.type.toString().toLowerCase());
                 switch (conversionInfo.type.toString().toLowerCase()) {
                     case "youtube":
                         handleYoutubeConvert();
@@ -153,6 +166,7 @@ const Conversion = () => {
     const handleVerifyURL = () => {
         // check if the url is empty
         if (currentConvert) {
+            console.log(currentConvert);
             // check if the provided URL is supported
             const isSupportedURL = (currentConvert.startsWith(validURLFormat.youtube.key) ||
                 currentConvert.startsWith(validURLFormat.facebook.key) ||
