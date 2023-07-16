@@ -125,7 +125,7 @@ const AppData = ({ children }) => {
     return (
         <DataProvider.Provider value={{ pages, converters, conversionInfo, converted, setConverted, errorMessage, setErrorMessage, switchConverter, serverReq, currentConvert, setCurrentConvert, setVideoObject, videoObject, validURLFormat }}>
             {children}
-            <SnackBar message={errorMessage} />
+            <SnackBar />
         </DataProvider.Provider>
     );
 }

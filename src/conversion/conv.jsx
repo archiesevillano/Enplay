@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import URLInput from "../components/URLInput/URLInput";
-import PrimaryButton from "../components/PrimaryButton/PrimaryButton";
 import { useContext, useState } from 'react';
 import { DataProvider } from '../AppData';
 import ContentUnavailable from './../../src/assets/not-available-content-img.jpg';
@@ -167,6 +166,9 @@ const Conversion = () => {
                     setConversionError(true);
                 }
             }
+        }
+        else {
+            console.log("Error input");
         }
     }
 

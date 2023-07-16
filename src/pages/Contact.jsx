@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import InputField from '../components/InputField/InputField';
-import PrimaryButton from '../components/PrimaryButton/PrimaryButton';
 import { DataProvider } from '../AppData';
+import AppButton from '../components/AppButton/AppButton';
 
 const Contact = () => {
 
@@ -30,7 +30,7 @@ const Contact = () => {
                     <InputField inputAction={setName} component="textbox" radius="5px" fontSize="0.9rem" label="Name" width="300px" id="nameField" autoComplete="off" fontFamily={"var(--inter)"} />
                     <InputField inputAction={setEmail} component="textbox" radius="5px" fontSize="0.9rem" label="Email" width="300px" id="nameField" autoComplete="off" fontFamily={"var(--inter)"} />
                     <InputField inputAction={setMessage} component="richbox" radius="5px" fontSize="0.9rem" label="Message" width="300px" id="nameField" autoComplete="off" fontFamily={"var(--inter)"} />
-                    <PrimaryButton action={handleSendMessage} cls={"w-100 mt-1"} text={"Send"} hasLoader={false} color="var(--primary-clr)" />
+                    <AppButton action={handleSendMessage} className={"w-100 mt-1"} text={"Send"} loader={false} />
                 </form>
             </div>
         </section>

@@ -9,7 +9,7 @@ const AppButton = ({ action, text, className, loader }) => {
     const handleClick = () => {
         //button will not be clickable after it has been clicked
         setAvailable(false);
-
+        action();
         //button will be unclickable for 15s once it is clicked
         setTimeout(() => {
             setAvailable(true);
