@@ -7,8 +7,10 @@ const SnackBar = () => {
     const { errorMessage, setErrorMessage } = useContext(DataProvider);
 
     useEffect(() => {
+        setVisibility(true);
         // only start the timer when message prop has value
         if (errorMessage) {
+            console.log("error occured");
             setTimeout(() => {
                 setVisibility(false);
                 setErrorMessage("");
