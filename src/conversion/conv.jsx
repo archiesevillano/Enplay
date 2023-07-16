@@ -4,6 +4,7 @@ import PrimaryButton from "../components/PrimaryButton/PrimaryButton";
 import { useContext, useState } from 'react';
 import { DataProvider } from '../AppData';
 import ContentUnavailable from './../../src/assets/not-available-content-img.jpg';
+import AppButton from '../components/AppButton/AppButton';
 
 const Conversion = () => {
 
@@ -20,20 +21,26 @@ const Conversion = () => {
             console.log(`/${conversionInfo.type.toString().toLowerCase()}`);
             const response = await serverReq.post(`/converter/${conversionInfo.type.toString().toLowerCase()}`, { accessKey: import.meta.env.VITE_ACCESS_KEY, url: currentConvert });
             console.log(response);
+            if (response.request === 0) {
+                throw "Network Error";
+            }
+            else {
+                // fetch mp4 formats only in formats array
+                const mp4Formats = response?.data?.formats.filter(item => item?.video_ext === FILE_EXTENSION && item?.acodec === 'mp4a.40.2');
+                mp4Formats.sort((a, b) => b.quality - a.quality);
 
-            // fetch mp4 formats only in formats array
-            const mp4Formats = response?.data?.formats.filter(item => item?.video_ext === FILE_EXTENSION && item?.acodec === 'mp4a.40.2');
-            mp4Formats.sort((a, b) => b.quality - a.quality);
+                console.log(mp4Formats);
 
-            console.log(mp4Formats);
+                const downloadURL = mp4Formats[0].url;
+                const videoThumbnail = response?.data?.thumbnail;
+                const videoTitle = response?.data?.fulltitle;
 
-            const downloadURL = mp4Formats[0].url;
-            const videoThumbnail = response?.data?.thumbnail;
-            const videoTitle = response?.data?.fulltitle;
+                setConvertDetails(videoTitle, videoThumbnail, downloadURL);
+                // if there's an error prior to this successful process, then it will be overwrite by the successful process
+                setConversionError(false);
+            }
 
-            setConvertDetails(videoTitle, videoThumbnail, downloadURL);
-            // if there's an error prior to this successful process, then it will be overwrite by the successful process
-            setConversionError(false);
+
         }
         catch (error) {
             console.log(error);
@@ -206,11 +213,8 @@ const Conversion = () => {
             <p className="col col-md-10" style={{ fontFamily: "var(--inter)", fontSize: "0.7rem", transform: "translate(0, -13px)" }}>Search and Copy the URL of the video you wish to download and Paste it in here</p>
             <div className="container-fluid  d-flex justify-content-evenly align-items-center">
                 <div className="col col-lg-7 d-flex justify-content-evenly align-items-center">
-                    {!hasConversionError ? <><PrimaryButton cls="col-5 col-sm-4 col-lg-4 col-md-5 col-lg-5 col-xl-4" text="Convert" action={handleConvert} hasLoader={true} color={"var(--primary-clr)"} />
-                        <PrimaryButton cls="col-5 col-sm-4 col-lg-4 col-md-5 col-lg-5 col-xl-4" text="Go back" action={handleGoBack} hasLoader={false} color={"var(--primary-clr)"} /></>
-                        :
-                        <><PrimaryButton cls="col-5 col-sm-4 col-lg-4 col-md-5 col-lg-5 col-xl-4" text="Retry" action={handleConvert} hasLoader={true} color={"var(--primary-clr)"} />
-                            <PrimaryButton cls="col-5 col-sm-4 col-lg-4 col-md-5 col-lg-5 col-xl-4" text="Go back" action={handleGoBack} hasLoader={false} color={"var(--primary-clr)"} /></>}
+                    <AppButton className="col-5 col-sm-4 col-lg-4 col-md-5 col-lg-5 col-xl-4" text={"Convert"} action={handleConvert} loader={true} />
+                    <AppButton className="col-5 col-sm-4 col-lg-4 col-md-5 col-lg-5 col-xl-4" text={"Go Back"} action={handleGoBack} loader={false} />
                 </div>
             </div>
         </div>
@@ -218,3 +222,9 @@ const Conversion = () => {
 }
 
 export default Conversion;
+
+// {!hasConversionError ? <><PrimaryButton cls="col-5 col-sm-4 col-lg-4 col-md-5 col-lg-5 col-xl-4" text="Convert" action={handleConvert} hasLoader={true} color={"var(--primary-clr)"} />
+//                         <PrimaryButton cls="col-5 col-sm-4 col-lg-4 col-md-5 col-lg-5 col-xl-4" text="Go back" action={handleGoBack} hasLoader={false} color={"var(--primary-clr)"} /></>
+//                         :
+//                         <><PrimaryButton cls="col-5 col-sm-4 col-lg-4 col-md-5 col-lg-5 col-xl-4" text="Retry" action={handleConvert} hasLoader={true} color={"var(--primary-clr)"} />
+//                             <PrimaryButton cls="col-5 col-sm-4 col-lg-4 col-md-5 col-lg-5 col-xl-4" text="Go back" action={handleGoBack} hasLoader={false} color={"var(--primary-clr)"} /></>}

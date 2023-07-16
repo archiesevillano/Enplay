@@ -1,0 +1,26 @@
+.appButton {
+    border: none;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    background: var(--primary-clr);
+    color: white;
+    border-radius: 5px;
+}
+
+.appButton__button {
+    border: none;
+    padding: 5px 12px;
+    background: none;
+    color: inherit;
+    width: 100%;
+    height: 100%;
+}
+
+.appButton__button:hover {
+    filter: brightness(95%);
+}
+
+.appButton__button:active {
+    filter: brightness(80%);
+}
